@@ -1,0 +1,14 @@
+SuperApp'in içeriği:
+    + Ana Tasarım:
+        - Hem Navbar hem Sidebar
+        - Ana renk (CD2C58, BF092F)
+        - Yan renk (132440,16476A, 811844,5C3E94,211832)
+        - Link (https://colorhunt.co/palette/f259125c3e94412b6b211832)
+    + Notlar Uygulaması:
+        - Not ekleyebilme
+        - Not Silebilme
+        - Not Düzenleyebilme
+        - Card rengini seçebilme
+        - Not içerisinde güzel bir text-editor bul
+    + Music Player:
+        - Beklemede
