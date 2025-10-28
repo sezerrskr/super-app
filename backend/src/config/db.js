@@ -7,7 +7,6 @@ const connectDB = async () => {
     console.log(`✅ MongoDB'ye başarıyla bağlanıldı: ${conn.connection.host}`);
   } catch (error) {
     console.error(`❌ MongoDB Bağlantı Hatası: ${error.message}`);
-    // Bağlantı kurulamadığı için uygulamayı durdurun
     process.exit(1); 
   }
 };

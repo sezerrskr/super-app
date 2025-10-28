@@ -15,11 +15,9 @@ app.use(express.json());
 
 // === YENİ ROUTE TANIMLAMASI ===
 const authRoutes = require('./routes/auth.routes');
+const noteRoutes = require('./routes/note.routes');
 app.use('/api/auth', authRoutes); // /api/auth/register ve /api/auth/login burada çalışacak
-// ===============================
-// (İleride Notlar için route'lar da buraya eklenecek)
-// const noteRoutes = require('./routes/note.routes');
-// app.use('/api/notes', noteRoutes);
+app.use('/api/notes', noteRoutes);
 
 app.get('/', (req, res) => {
   res.send('Backend Sunucusu Çalışıyor!');
