@@ -1,0 +1,146 @@
+'use client';
+
+import React, { useState } from 'react';
+
+interface LoginFormState {
+    email: string;
+    password: string;
+}
+
+const LoginPage = () => {
+    // 1. Form state'ini tanımlama
+    const [formData, setFormData] = useState<LoginFormState>({
+        email: '',
+        password: '',
+    });
+
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+
+    // 2. Input değişimlerini yakalama
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    // 3. Form gönderimini ele alma (İleride backend'e bağlanacak)
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setLoading(true);
+
+        console.log('Giriş Yapılmaya Çalışılıyor:', formData);
+
+        // TODO: BURAYA BACKEND API ÇAĞRISI EKLENECEK
+        // try {
+        //     const response = await api.login(formData.email, formData.password);
+        //     // Başarılı olursa yönlendirme yap
+        // } catch (err) {
+        //     setError('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+        // } finally {
+        //     setLoading(false);
+        // }
+
+        setLoading(false);
+    };
+
+    return (
+        <div className='flex items-center justify-center min-h-screen bg-gray-900 p-4'>
+            {/* Form Kartı */}
+            <div className='w-full sm:w-[400px] bg-gray-800 p-8 rounded-xl shadow-2xl transition-all duration-300'>
+
+                {/* Başlık */}
+                <div className='text-center mb-8'>
+                    <h1 className='text-white text-3xl font-extrabold tracking-tight'>
+                        Hesabınıza Giriş Yapın
+                    </h1>
+                    {error && (
+                        <p className="mt-4 text-sm text-red-400 font-medium">
+                            {error}
+                        </p>
+                    )}
+                </div>
+
+                {/* Form */}
+                <form className='space-y-6' onSubmit={handleSubmit}>
+
+                    {/* E-posta Alanı */}
+                    <div>
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-medium text-gray-300 mb-2"
+                        >
+                            E-posta
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                            placeholder="ornek@mail.com"
+                        />
+                    </div>
+
+                    {/* Parola Alanı */}
+                    <div>
+                        <label
+                            htmlFor="password"
+                            className="block text-sm font-medium text-gray-300 mb-2"
+                        >
+                            Parola
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"
+                            placeholder="••••••••"
+                        />
+                    </div>
+
+                    {/* Giriş Yap Butonu */}
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 transition duration-150 ease-in-out"
+                    >
+                        {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
+                    </button>
+                </form>
+
+                {/* Seçenekler */}
+                <div className='mt-6 text-center text-sm space-y-2'>
+                    <a
+                        href="/auth/register"
+                        className='font-medium text-blue-400 hover:text-blue-300 transition-colors duration-150 block'
+                    >
+                        Kayıtlı Değil Misiniz? Hemen Kaydolun.
+                    </a>
+                    <a
+                        href="/:id"
+                        className='font-medium text-gray-400 hover:text-gray-300 transition-colors duration-150 block'
+                    >
+                        Parolanızı mı unuttunuz?
+                    </a>
+                    <a
+                        href="/"
+                        className='font-medium text-gray-400 hover:text-gray-300 transition-colors duration-150 block'
+                    >
+                        Ana sayfaya dön
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default LoginPage;

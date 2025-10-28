@@ -1,80 +1,83 @@
-
-.tiptap-wrapper {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+tiptap-wrapper {
+  border: 1px solid #1e3a8a; 
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border-radius: 12px;
   overflow: hidden;
-  max-width: 900px; 
+  max-width: 900px;
   margin: 2rem auto;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 
 /* Menü Çubuğu Stilleri */
 .menu-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  padding: 8px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #ddd;
+  gap: 6px; 
+  padding: 10px;
+  background-color: #111827;
+  border-bottom: 1px solid #1e3a8a;
 }
 
 .menu-bar button {
   font-size: 0.9rem;
   font-weight: 500;
-  padding: 6px 10px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: #fff;
+  padding: 8px 12px;
+  border: 1px solid #374151; 
+  border-radius: 6px;
+  background-color: #374151;
+  color: #f3f4f6; 
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .menu-bar button:hover {
-  background-color: #f0f0f0;
+  background-color: #4b5563; 
+  color: #ffffff;
 }
 
 /* Aktif buton stili */
 .menu-bar button.is-active {
-  background-color: #e0e7ff; /* Açık mavi */
-  color: #4f46e5; /* Koyu mavi */
-  border-color: #c7d2fe;
+  background-color: #3b82f6; 
+  color: #ffffff; 
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px #93c5fd; 
 }
 
 /* Pasif buton stili */
 .menu-bar button:disabled {
-  color: #a0a0a0;
+  color: #6b7280;
   cursor: not-allowed;
-  background-color: #fafafa;
+  background-color: #1f2937;
+  border-color: #374151;
 }
 
 /* Tiptap'ın ana içerik alanı stilleri */
 .ProseMirror {
-  padding: 1rem;
-  min-height: 250px;
-  outline: none; /* Tıklama çerçevesini kaldırır */
+  padding: 1.5rem; 
+  min-height: 300px; 
+  outline: none;
+  line-height: 1.6; 
 }
 
-/* Tiptap'ın temel metin stilleri (Prose)
-  Başlıklar, listeler, kalın metin vb. için boşluk ve boyutlandırma
-*/
+/* Tiptap'ın temel metin stilleri (Prose) */
 .ProseMirror > * + * {
-  margin-top: 0.75em;
+  margin-top: 1em; 
 }
 
 .ProseMirror ul,
 .ProseMirror ol {
-  /* Bu iki satır en kritik olanlardır */
-  padding-left: 1.5rem; /* Madde işaretine yer açar */
-  list-style-position: outside; /* VEYA inside, hangisi daha iyi görünürse */
+  padding-left: 1.8rem;
+  list-style-position: outside;
 }
 
 .ProseMirror ul {
-    list-style-type: disc; /* Normal yuvarlak nokta */
+  list-style-type: disc;
 }
 
 .ProseMirror ol {
-    list-style-type: decimal; /* 1., 2., 3. */
+  list-style-type: decimal;
 }
 
 .ProseMirror h1,
@@ -83,38 +86,43 @@
 .ProseMirror h4,
 .ProseMirror h5,
 .ProseMirror h6 {
-  line-height: 1.1;
-  font-weight: 600;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #a5b4fc; 
 }
 
 .ProseMirror h2 {
-  font-size: 1.5em;
+  font-size: 1.8em;
+  border-bottom: 1px solid #374151;
+  padding-bottom: 0.2em;
 }
 
 .ProseMirror h3 {
-  font-size: 1.25em;
+  font-size: 1.4em;
 }
 
+/* Kod ve Kod Blokları */
 .ProseMirror code {
-  background-color: #f1f1f1;
-  color: #dd1144;
+  background-color: #374151;
+  color: #f87171;
   padding: 0.2em 0.4em;
   border-radius: 4px;
   font-size: 0.9em;
 }
 
 .ProseMirror pre {
-  background: #0d0d0d;
-  color: #fff;
+  background: #111827;
+  color: #9ca3af; 
   font-family: 'JetBrainsMono', monospace;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  overflow-x: auto; 
 }
 
 .ProseMirror blockquote {
-  padding-left: 1rem;
-  border-left: 3px solid #ccc;
-  margin-left: 0.5rem;
+  padding-left: 1.5rem;
+  border-left: 4px solid #3b82f6; 
+  margin: 1.5rem 0;
   font-style: italic;
-  color: #555;
+  color: #9ca3af; 
 }

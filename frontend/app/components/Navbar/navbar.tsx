@@ -1,6 +1,5 @@
 "use client"
 import React, { useState } from 'react';
-import Link from 'next/link';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,25 +8,23 @@ const Navbar = () => {
   };
 
   return (
-    // UYARILAR GİDERİLDİ: 'relative' kaldırıldı, z-index sözdizimi düzeltildi.
-    <div className='nav flex bg-(--main-bg) text-white w-full items-center justify-between p-4 lg:px-10 sticky top-0 z-100'> 
-      
-      {/* Marka */}
+    <div className='flex bg-gray-800 text-gray-100 w-full items-center justify-between p-4 lg:px-10 sticky top-0 z-50 shadow-lg'>
+
       <div className='Marka font-semibold text-xl'>
-        <Link href="/">superApp</Link>
+        <a href="/">superApp</a>
       </div>
-      
+
       {/* 1. Masaüstü Linkleri */}
-      <nav className='hidden md:flex gap-6 font-medium text-base'>
-        <Link href="/notes" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>Notes</Link>
-        <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>MusicApp</Link>
-        <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>Yakında...</Link>
-        <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>Yakında...</Link>
+      <nav className='hidden md:flex gap-3 font-medium text-base'>
+        <a href="/notes" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>Notes</a>
+        <a href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>MusicApp</a>
+        <a href="/auth/login" rel="noopener noreferrer" className='hover:bg-blue-700 bg-blue-600 rounded-lg px-2 transition duration-300 p-1'>Giriş yap</a>
+        <a href="/auth/register" rel="noopener noreferrer" className='hover:bg-green-700 bg-green-600 rounded-lg px-2 transition duration-300 p-1'>Kayıt Ol</a>
       </nav>
-      
+
       {/* 2. Hamburger Butonu */}
-      <button 
-        className='md:hidden p-2 rounded-md hover:bg-white/10 transition duration-200 focus:outline-none' 
+      <button
+        className='md:hidden p-2 rounded-md hover:bg-white/10 transition duration-200 focus:outline-none'
         onClick={toggleMenu}
         aria-label="Toggle navigation menu"
       >
@@ -40,15 +37,13 @@ const Navbar = () => {
         </svg>
       </button>
 
-      {/* 3. Mobil Menü Alanı (TEMİZLENDİ) */}
-      {/* top-full ile Navbar'ın hemen altına indirilir. */}
-      <div className={`md:hidden absolute w-full bg-(--main-bg) border-t border-white/20 transition-all duration-300 ease-in-out overflow-hidden ${isMenuOpen ? 'max-h-96 opacity-100 py-4 left-0' : 'max-h-0 opacity-0'} z-90 top-full`}> 
-        
+      {/* 3. Mobil Menü Alanı */}
+      <div className={`md:hidden absolute w-full bg-gray-800 border-t border-gray-700 transition-all duration-300 ease-in-out overflow-hidden ${isMenuOpen ? 'max-h-96 opacity-100 py-4 left-0' : 'max-h-0 opacity-0'} z-40 top-full`}>
         <nav className='flex flex-col items-center gap-3 font-medium text-lg'>
-            <Link href="/notes"rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Notes</Link>
-            <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>MusicApp</Link>
-            <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Yakında..</Link>
-            <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Yakında..</Link>
+          <a href="/notes" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Notes</a>
+          <a href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>MusicApp</a>
+          <a href="auth/login" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Giriş Yap</a>
+          <a href="auth/register" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Kayıt Ol</a>
         </nav>
       </div>
 

@@ -1,19 +1,22 @@
 import React from "react";
 import Navbar from "@/app/components/Navbar/navbar";
 import TiptapFullEditor from "@/app/components/rich-text-editor/page";
-import Link from "next/link";
-const HomePage = () => {
 
-  
+const HomePage = () => {
   return (
-    <div>
+    <div className="bg-gray-900 w-full min-h-screen text-gray-100"> 
       <Navbar />
-      <div className="top-menu flex justify-end px-4 mt-10">
-        <div className="bg-(--main-bg) px-6 py-1 rounded-full text-white cursor-pointer">
-          <Link href="notes/addnote">Gönder Gitsin</Link>
-        </div>
+      
+      <div className="top-menu flex justify-end px-4 mt-10 max-w-7xl mx-auto">
+        <a
+          href="notes/addnote"
+          className='bg-indigo-600 hover:bg-indigo-700 px-8 py-3 rounded-full text-white font-bold text-lg tracking-wide cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]'
+        >
+          📝 Not Ekle
+        </a>
       </div>
-      <div className="max-w-5xl max-md:max-w-xl max-sm:max-w-sm mx-auto py-8">
+      
+      <div className="max-w-6xl max-md:px-4 mx-auto py-12">
         <TiptapFullEditor />
       </div>
     </div>

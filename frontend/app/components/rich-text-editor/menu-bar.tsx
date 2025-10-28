@@ -9,9 +9,9 @@ type MenuBarProps = {
 
 const MenuBar = ({ editor }: MenuBarProps) => {
   if (!editor) {
-    return null; // Editör yüklenmediyse menüyü gösterme
+    return null;
   }
-  const toggleCode = () => editor.chain().focus().toggleCode().run(); 
+  const toggleCode = () => editor.chain().focus().toggleCode().run();
   return (
     <div className="menu-bar">
       <button
@@ -53,9 +53,9 @@ const MenuBar = ({ editor }: MenuBarProps) => {
       </button>
 
       <button
-        onClick={toggleCode} // YENİ
-        disabled={!editor.can().chain().focus().toggleCode().run()} // YENİ
-        className={editor.isActive('code') ? 'is-active' : ''} // YENİ
+        onClick={toggleCode}
+        disabled={!editor.can().chain().focus().toggleCode().run()}
+        className={editor.isActive('code') ? 'is-active' : ''}
       >
         Inline Kod
       </button>
