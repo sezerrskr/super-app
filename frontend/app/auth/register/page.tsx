@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+
 interface RegisterFormState {
     username: string;
     email: string;
@@ -20,6 +21,7 @@ const RegisterPage = () => {
     const [error, setError] = useState<string | null>(null);
 
 
+
     // 2. Input değişimlerini yakalama
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -28,25 +30,50 @@ const RegisterPage = () => {
         });
     };
 
-    // 3. Form gönderimini ele alma (İleride backend'e bağlanacak)
+    // 3. Form gönderimini ele alma
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
 
-        console.log('Kayıt İşlemi Başlatılıyor:', formData);
+        const API_URL = 'http://localhost:5000/api/auth/register/';
 
-        // TODO: BURAYA BACKEND API ÇAĞRISI EKLENECEK
-        // try {
-        //     const response = await api.register(formData);
-        //     // Başarılı olursa yönlendirme yap (örn: /login)
-        // } catch (err) {
-        //     setError('Kayıt başarısız. Lütfen bilgileri kontrol edin veya farklı bir e-posta kullanın.');
-        // } finally {
-        //     setLoading(false);
-        // }
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password,
+                }),
+            });
+            // Yanıtın JSON formatını ayrıştırma
 
-        setLoading(false);
+            const data = await response.json();
+            if (response.ok) {
+                // Başarılı Giriş (Ör: 200/201)
+                const token = data.token;
+                if (token) {
+                    // tokeni kaydet
+                    window.localStorage.setItem("authToken", token);
+                    window.location.href = "/";
+                    // Yönlendirme olduğu için return ediyoruz
+                    return;
+                }
+            } else {
+                // Başarısız Giriş (Ör: 400, 401, 403)
+                setError(data.message || 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+            }
+        } catch (err) {
+            // Ağ hatası veya fetch işleminin kendisindeki hata (CORS da buraya düşebilir)
+            console.error('API Çağrısı Başarısız:', err);
+            setError('Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

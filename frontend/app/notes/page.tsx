@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar/navbar'
 import Card from '../components/NotesCard/card'
-
+import Link from 'next/link'
 
 const page = () => {
 
@@ -22,25 +22,22 @@ const page = () => {
         {/* Başlık ve Buton Alanı */}
         <div className='top-menu flex justify-between items-center mb-6'>
           <h1 className='text-3xl font-medium'>My Notes</h1>
-          <a 
+          <Link
             href="notes/addnote" 
             className='bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-full text-white font-semibold cursor-pointer transition-colors duration-300 shadow-md'
           >
             Not Ekle
-          </a>
+          </Link>
         </div>
 
 
-        {/* Not Kartları Grid Alanı */}
-        {/* gap (boşluk) artırıldı, mt-8 ile Gemini bileşeni ile araya mesafe kondu */}
         <div className='grid grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 gap-4 mt-8'>
-          {/* Hardcoded veriyi map ederek dinamik kartlar oluşturuyoruz */}
           {hardcodedNotes.map(note => (
             <Card 
               key={note._id} 
               title={note.title} 
               content={note.content}
-              href={`/notes/edit/${note._id}`} // Her kartın kendi düzenleme sayfasına gitmesi için
+              href={`/notes/edit/${note._id}`} 
             />
           ))}
         </div>

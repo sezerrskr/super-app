@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 const cors = require("cors");
 app.use(cors({ origin: 'http://localhost:3000' }));
-app.use(express.json());
+app.use(express.json()); // JSON verilerini işlemek için
 
 // === YENİ ROUTE TANIMLAMASI ===
 const authRoutes = require('./routes/auth.routes');
@@ -28,5 +28,3 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ Backend sunucusu http://localhost:${PORT} portunda çalışıyor`);
 });
-// Gelen JSON verilerini işlemek için
-app.use(express.json());    

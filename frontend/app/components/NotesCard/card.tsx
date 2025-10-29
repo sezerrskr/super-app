@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 // Bileşenin props alması için arayüz (interface) tanımlaması
 interface CardProps {
@@ -26,7 +27,7 @@ const Card: React.FC<CardProps> = ({ title, content, href }) => {
 
   return (
     // Tüm kartı tıklanabilir bir <a> etiketi yapalım ve stilini güncelleyelim
-    <a 
+    <Link 
       href={href} // Dinamik link
       className='block w-full bg-gray-800 rounded-lg p-4 shadow-lg transition-all duration-300 hover:bg-gray-700 hover:shadow-xl hover:-translate-y-1'
     > 
@@ -39,7 +40,7 @@ const Card: React.FC<CardProps> = ({ title, content, href }) => {
           {plainTextContent || "İçerik yok..."}
         </p>
       </div>
-    </a>
+    </Link>
   )
 }
 
