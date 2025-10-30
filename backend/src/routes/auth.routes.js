@@ -2,6 +2,7 @@ const express = require("express");
 const { check } = require('express-validator');
 const router = express.Router();
 const authController = require("../controllers/auth.controller");
+const authMiddleware = require('../middleware/auth.middleware');
 
 /**
  * @route   POST /api/auth/register
@@ -29,3 +30,9 @@ router.post(
 );
 
 module.exports = router;
+/**
+ * @route   GET /api/auth/me
+ * @desc    Aktif kullanıcının bilgileri (korumalı)
+ * @access  Private
+ */
+router.get('/me', authMiddleware, authController.getMe);

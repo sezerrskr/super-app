@@ -59,6 +59,12 @@ const RegisterPage = () => {
                 if (token) {
                     // tokeni kaydet
                     window.localStorage.setItem("authToken", token);
+                    if (data.username) {
+                        window.localStorage.setItem("username", data.username);
+                    }
+                    if (data.id) {
+                        window.localStorage.setItem("userId", data.id);
+                    }
                     window.location.href = "/";
                     // Yönlendirme olduğu için return ediyoruz
                     return;

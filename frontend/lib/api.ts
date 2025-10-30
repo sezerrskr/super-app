@@ -10,7 +10,7 @@ async function apiCall(endpoint: string, options: RequestInit = {}) {
   };
 
   // Token varsa Authorization header'ına ekle
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken');
   if (token) {
     defaultHeaders['Authorization'] = `Bearer ${token}`;
   }

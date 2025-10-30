@@ -11,6 +11,8 @@ import React, {
 interface AuthContextType {
   isAuthenticated: boolean;
   authToken: string | null;
+  username: string | null;
+  userId: string | null;
   isLoading: boolean;
   logout: () => void;
 }
@@ -18,8 +20,10 @@ interface AuthContextType {
 const defaultAuthContext: AuthContextType = {
   isAuthenticated: false,
   authToken: null,
+  username: null,
+  userId: null,
   isLoading: true,
-  logout: () => {},
+  logout: () => { },
 };
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext);
@@ -32,15 +36,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [username, setUsername] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  // Token doğrulama (ileride backend ile entegre edebilirsin)
-  const validateTokenOnServer = async (token: string): Promise<boolean> => {
+
+  // Token doğrulama: backend /auth/me ile gerçek kontrol
+  const validateTokenOnServer = async (token: string): Promise<{ valid: boolean; username?: string; id?: string; }> => {
     try {
-      // API isteği simülasyonu (ileride backend'e bağlanacak)
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      return !!token; // şimdilik token varsa geçerli
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const res = await fetch(`${API_BASE_URL}/auth/me`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+      if (!res.ok) return { valid: false };
+      const data = await res.json();
+      return { valid: true, username: data.username, id: data.id };
     } catch {
-      return false;
+      return { valid: false };
     }
   };
 
@@ -54,6 +68,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (token) {
         setAuthToken(token);
         setIsAuthenticated(true);
+        const storedUsername = localStorage.getItem("username");
+        const storedUserId = localStorage.getItem("userId");
+        if (storedUsername) setUsername(storedUsername);
+        if (storedUserId) setUserId(storedUserId);
       }
       setIsLoading(false);
       return;
@@ -62,12 +80,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkAuthStatus = async () => {
       const token = localStorage.getItem("authToken");
       if (token) {
-        const isValid = await validateTokenOnServer(token);
-        if (isValid) {
+        const result = await validateTokenOnServer(token);
+        if (result.valid) {
           setAuthToken(token);
           setIsAuthenticated(true);
+          if (result.username) setUsername(result.username);
+          if (result.id) setUserId(result.id);
+          // localStorage'i de senkron tutalım
+          if (result.username) localStorage.setItem('username', result.username);
+          if (result.id) localStorage.setItem('userId', result.id);
         } else {
           localStorage.removeItem("authToken");
+          localStorage.removeItem("username");
+          localStorage.removeItem("userId");
         }
       }
       setIsLoading(false);
@@ -80,7 +105,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setAuthToken(null);
     setIsAuthenticated(false);
+    setUsername(null);
+    setUserId(null);
     localStorage.removeItem("authToken");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userId");
     sessionStorage.removeItem("authChecked");
     window.location.href = "/auth/login";
   };
@@ -88,6 +117,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextType = {
     isAuthenticated,
     authToken,
+    username,
+    userId,
     isLoading,
     logout,
   };

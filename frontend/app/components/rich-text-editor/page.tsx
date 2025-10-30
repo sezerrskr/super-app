@@ -1,12 +1,17 @@
 // page.tsx
-'use client';
+"use client";
 
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import MenuBar from './menu-bar'; 
 import './styles.css'; 
 
-const TiptapPage = () => {
+type EditorProps = {
+  onChange?: (html: string) => void;
+  initialContent?: string;
+};
+
+const TiptapPage = ({ onChange, initialContent }: EditorProps) => {
   const editor = useEditor({
     // StarterKit, temel metin biçimlendirme özelliklerinin çoğunu içerir
     extensions: [
@@ -16,20 +21,14 @@ const TiptapPage = () => {
       }),
     ],
     // Editörün başlangıç içeriği
-    content: `
-      <h2>
-        Merhaba, Tiptap Editör'e hoş geldiniz!
-      </h2>
-      <p>
-        Bu, <b>kalın</b>, <i>italik</i> ve <code>kod</code> içeren temel bir metin düzenleyicidir.
-      </p>
-      <ul>
-        <li>Liste öğesi 1</li>
-        <li>Liste öğesi 2</li>
-      </ul>
-    `,
+    content: initialContent || '',
     // SSR ortamlarında (Next.js gibi) ilk render sorunlarını önler
     immediatelyRender: false, 
+    onUpdate({ editor }) {
+      if (onChange) {
+        onChange(editor.getHTML());
+      }
+    },
   });
 
   return (

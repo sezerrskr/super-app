@@ -1,9 +1,12 @@
 "use client"
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false); // Profil açılır menü durumu
+  const { isAuthenticated, username, userId, logout } = useAuth();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -19,8 +22,41 @@ const Navbar = () => {
       <nav className='hidden md:flex gap-3 font-medium text-base'>
         <Link href="/notes" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>Notes</Link>
         <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>MusicApp</Link>
-        <Link href="/auth/login" rel="noopener noreferrer" className='hover:bg-blue-700 bg-blue-600 rounded-lg px-2 transition duration-300 p-1'>Giriş yap</Link>
-        <Link href="/auth/register" rel="noopener noreferrer" className='hover:bg-green-700 bg-green-600 rounded-lg px-2 transition duration-300 p-1'>Kayıt Ol</Link>
+        {isAuthenticated ? (
+          <div className='relative'>
+            {/* Profil tetikleyici: kullanıcı adı kutusu */}
+            <button
+              onClick={() => setIsProfileOpen((v) => !v)}
+              className='px-3 py-1 rounded-lg bg-gray-700 text-gray-200 hover:bg-gray-600'
+            >
+              @{username}
+            </button>
+            {/* Açılır menü */}
+            {isProfileOpen && (
+              <div className='absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50'>
+                {/* Profil sayfası: username ile dinamik route */}
+                <Link
+                  href={`/auth/profile/${userId || username}`}
+                  className='block px-4 py-2 hover:bg-gray-700'
+                  onClick={() => setIsProfileOpen(false)}
+                >
+                  Profilim
+                </Link>
+                <button
+                  onClick={() => { setIsProfileOpen(false); logout(); }}
+                  className='w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400'
+                >
+                  Çıkış Yap
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            <Link href="/auth/login" rel="noopener noreferrer" className='hover:bg-blue-700 bg-blue-600 rounded-lg px-2 transition duration-300 p-1'>Giriş yap</Link>
+            <Link href="/auth/register" rel="noopener noreferrer" className='hover:bg-green-700 bg-green-600 rounded-lg px-2 transition duration-300 p-1'>Kayıt Ol</Link>
+          </>
+        )}
       </nav>
 
       {/* 2. Hamburger Butonu */}
@@ -43,8 +79,18 @@ const Navbar = () => {
         <nav className='flex flex-col items-center gap-3 font-medium text-lg'>
           <Link href="/notes" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Notes</Link>
           <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>MusicApp</Link>
-          <Link href="auth/login" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Giriş Yap</Link>
-          <Link href="auth/register" target="_blank" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Kayıt Ol</Link>
+          {isAuthenticated ? (
+            <>
+              {/* Mobilde profil menüsü: basit linkler */}
+              <Link href={`/auth/profile/${userId || username}`} className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Profilim</Link>
+              <button onClick={() => { toggleMenu(); logout(); }} className='block w-full text-center p-2 hover:bg-white/10 text-red-400'>Çıkış Yap</button>
+            </>
+          ) : (
+            <>
+              <Link href="/auth/login" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Giriş Yap</Link>
+              <Link href="/auth/register" rel="noopener noreferrer" className='block w-full text-center p-2 hover:bg-white/10' onClick={toggleMenu}>Kayıt Ol</Link>
+            </>
+          )}
         </nav>
       </div>
 
