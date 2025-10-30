@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '@/app/components/Navbar/navbar'
 import { useParams } from 'next/navigation'
+import Link from 'next/link'
 
 const ProfilePage = () => {
   // URL'den dinamik parametreyi alıyoruz (örn: /auth/profile/sezer)
@@ -95,10 +96,10 @@ const ProfilePage = () => {
             <p className='text-xl'>{email || 'Bilinmiyor'}</p>
           </div>
 
-          {/* İleride profil ayarları butonları eklenebilir */}
+          {/* Aksiyon butonları: düzenleme ve notlara git */}
           <div className='mt-6 flex gap-3'>
             {/* Örnek butonlar - henüz fonksiyon eklemedik */}
-            <button className='bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg'>Profili Düzenle</button>
+            <a href={`/auth/profile/edit/`} className='bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg'>Profili Düzenle</a>
             <button className='bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg'>Şifreyi Değiştir</button>
           </div>
           </>

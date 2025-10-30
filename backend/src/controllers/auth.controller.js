@@ -87,16 +87,95 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-// Me: Token'a bağlı kullanıcının temel bilgilerini döndür
-exports.getMe = async (req, res) => {
+exports.editUser = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('username email');
-        if (!user) {
-            return res.status(404).json({ msg: 'Kullanıcı bulunamadı' });
+        // 1) Mevcut mu kontrolü (kendi id'n hariç)
+        const { username, email } = req.body;
+        if (username) {
+            const exists = await User.findOne({ username, _id: { $ne: req.user.id } });
+            if (exists) {
+                return res.status(400).json({ errors: [{ msg: 'Bu kullanıcı adı zaten kayıtlı' }] });
+            }
         }
-        return res.status(200).json({ id: req.user.id, username: user.username, email: user.email });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).send('Sunucu Hatası');
+
+        // 2) Güncelle
+        const updated = await User.findOneAndUpdate(
+            { _id: req.user.id },
+            { $set: { username, email } },
+            { new: true, runValidators: true }
+        );
+        return res.json(updated);
+
+    } catch (err) {
+        if (err && err.code === 11000) {
+            const field = Object.keys(err.keyPattern || {})[0] || 'alan';
+            return res.status(400).json({ errors: [{ msg: `Bu ${field} zaten kayıtlı` }] });
+        }
+        console.error(err);
+        return res.status(500).json({ msg: 'Sunucu hatası' });
     }
 };
+
+// Me: Token'a bağlı kullanıcının temel bilgilerini döndür
+exports.getMe = async (req, res) => {
+        try {
+            const user = await User.findById(req.user.id).select('username email');
+            if (!user) {
+                return res.status(404).json({ msg: 'Kullanıcı bulunamadı' });
+            }
+            return res.status(200).json({ id: req.user.id, username: user.username, email: user.email });
+        } catch (error) {
+            console.error(error.message);
+            return res.status(500).send('Sunucu Hatası');
+        }
+    };
+
+    // Me: Kullanıcı adı ve e-posta güncelle (şifre hariç)
+    exports.editMe = async (req, res) => {
+        try {
+            // Sadece izin verilen alanları al (allowlist)
+            const updates = {};
+            if (typeof req.body.username === 'string') {
+                updates.username = req.body.username.trim().toLowerCase();
+            }
+            if (typeof req.body.email === 'string') {
+                updates.email = req.body.email.trim().toLowerCase();
+            }
+
+            if (Object.keys(updates).length === 0) {
+                return res.status(400).json({ errors: [{ msg: 'Güncellenecek alan bulunamadı' }] });
+            }
+
+            // Benzersizlik kontrolü (kendi id’n hariç)
+            if (updates.username) {
+                const existsU = await User.findOne({ username: updates.username, _id: { $ne: req.user.id } }).select('_id').lean();
+                if (existsU) {
+                    return res.status(409).json({ errors: [{ msg: 'Bu kullanıcı adı zaten kayıtlı' }] });
+                }
+            }
+            if (updates.email) {
+                const existsE = await User.findOne({ email: updates.email, _id: { $ne: req.user.id } }).select('_id').lean();
+                if (existsE) {
+                    return res.status(409).json({ errors: [{ msg: 'Bu e‑posta zaten kayıtlı' }] });
+                }
+            }
+
+            const updated = await User.findOneAndUpdate(
+                { _id: req.user.id },
+                { $set: updates },
+                { new: true, runValidators: true, upsert: false, projection: { username: 1, email: 1 } }
+            );
+
+            if (!updated) {
+                return res.status(404).json({ msg: 'Kullanıcı bulunamadı' });
+            }
+            return res.json(updated);
+        } catch (err) {
+            if (err && err.code === 11000) {
+                const field = Object.keys(err.keyPattern || {})[0] || 'alan';
+                return res.status(409).json({ errors: [{ msg: `Bu ${field} zaten kayıtlı` }] });
+            }
+            console.error(err.message);
+            return res.status(500).json({ msg: 'Sunucu hatası' });
+        }
+    };

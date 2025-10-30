@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext';
+import Dropdown, { DropdownItem } from '../ui/Dropdown';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,34 +24,10 @@ const Navbar = () => {
         <Link href="/notes" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>Notes</Link>
         <Link href="https://www.instagram.com/sezerr.skr/" target="_blank" rel="noopener noreferrer" className='hover:text-blue-400 transition duration-300 p-1'>MusicApp</Link>
         {isAuthenticated ? (
-          <div className='relative'>
-            {/* Profil tetikleyici: kullanıcı adı kutusu */}
-            <button
-              onClick={() => setIsProfileOpen((v) => !v)}
-              className='px-3 py-1 rounded-lg bg-gray-700 text-gray-200 hover:bg-gray-600'
-            >
-              @{username}
-            </button>
-            {/* Açılır menü */}
-            {isProfileOpen && (
-              <div className='absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50'>
-                {/* Profil sayfası: username ile dinamik route */}
-                <Link
-                  href={`/auth/profile/${userId || username}`}
-                  className='block px-4 py-2 hover:bg-gray-700'
-                  onClick={() => setIsProfileOpen(false)}
-                >
-                  Profilim
-                </Link>
-                <button
-                  onClick={() => { setIsProfileOpen(false); logout(); }}
-                  className='w-full text-left px-4 py-2 hover:bg-gray-700 text-red-400'
-                >
-                  Çıkış Yap
-                </button>
-              </div>
-            )}
-          </div>
+          <Dropdown align='right' trigger={<span>@{username}</span>}>
+            <DropdownItem as='a' href={`/auth/profile/${userId || username}`}>Profilim</DropdownItem>
+            <DropdownItem onClick={logout} className='text-red-400'>Çıkış Yap</DropdownItem>
+          </Dropdown>
         ) : (
           <>
             <Link href="/auth/login" rel="noopener noreferrer" className='hover:bg-blue-700 bg-blue-600 rounded-lg px-2 transition duration-300 p-1'>Giriş yap</Link>
